@@ -30,11 +30,13 @@ class UserSignUpFormState extends State<UserSignUpForm> {
                 hintText: 'Introduce tu nombre',
                 border: OutlineInputBorder(),
               ),
-              // The validator receives the text that the user has entered.
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'por favor digite el nombre';
-                }
+                if (value == null || value.isEmpty)
+                  return 'por favor escriba el nombre';
+                if (value.trim().length < 2)
+                  return 'el nombre debe tener al menos 2 caracteres';
+                if (value.trim().length > 50)
+                  return 'el nombre no debe superar 50 caracteres';
                 return null;
               },
               onSaved: (value) => _name = value ?? '',
@@ -47,9 +49,12 @@ class UserSignUpFormState extends State<UserSignUpForm> {
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'por favor digite los apellidos';
-                }
+                if (value == null || value.isEmpty)
+                  return 'por favor escriba los apellidos';
+                if (value.trim().length < 2)
+                  return 'los apellidos deben tener al menos 2 caracteres';
+                if (value.trim().length > 50)
+                  return 'los apellidos no deben superar 50 caracteres';
                 return null;
               },
               onSaved: (value) => _surname = value ?? '',
@@ -62,9 +67,13 @@ class UserSignUpFormState extends State<UserSignUpForm> {
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'por favor digite el email';
-                }
+                if (value == null || value.isEmpty)
+                  return 'por favor escriba el email';
+                final emailRegex = RegExp(
+                  r'^[\w\.\-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$',
+                );
+                if (!emailRegex.hasMatch(value.trim()))
+                  return 'introduzca un email valido';
                 return null;
               },
               onSaved: (value) => _email = value ?? '',
@@ -77,9 +86,11 @@ class UserSignUpFormState extends State<UserSignUpForm> {
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'por favor digite el telefono ';
-                }
+                if (value == null || value.isEmpty)
+                  return 'por favor escriba el telefono';
+                final phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{3}$');
+                if (!phoneRegex.hasMatch(value.trim()))
+                  return 'introduzca un teléfono valido (999-999-999)';
                 return null;
               },
               onSaved: (value) => _phone = value ?? '',
@@ -88,10 +99,7 @@ class UserSignUpFormState extends State<UserSignUpForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
                     _formKey.currentState!.save();
                     User user = User(_name, _surname, _email, _phone);
                     Navigator.pop(context, user);

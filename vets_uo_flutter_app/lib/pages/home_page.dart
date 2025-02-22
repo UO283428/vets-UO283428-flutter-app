@@ -3,6 +3,7 @@ import 'package:vets_uo_flutter_app/src/user.dart';
 import 'package:vets_uo_flutter_app/pages/user_signup_form.dart';
 import 'package:vets_uo_flutter_app/pages/custom_alert_dialog.dart';
 import 'package:vets_uo_flutter_app/pages/user_edit_form.dart';
+import 'package:vets_uo_flutter_app/pages/user_info.dart';
 
 class HomePage extends StatefulWidget {
   //final String _title;
@@ -65,7 +66,17 @@ class StateHomePage extends State<HomePage> {
             leading: CircleAvatar(
               child: Text(users[index].name.substring(0, 1)),
             ),
-            trailing: const Icon(Icons.call, color: Colors.black),
+            trailing: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserInfo(user: users[index]),
+                  ),
+                );
+              },
+              child: const Icon(Icons.call, color: Colors.black),
+            ),
           );
         },
       ),
